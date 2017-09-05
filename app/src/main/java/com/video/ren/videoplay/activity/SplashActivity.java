@@ -21,21 +21,26 @@ public class SplashActivity extends AppCompatActivity implements PermissionDialo
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        VideoUtils.findAllVideo(this);
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (PermissionUtils.checkPermission(this)) {
+                VideoUtils.findAllVideo(this);
+                IntentMainActivity();
+            }
+        } else {
+            VideoUtils.findAllVideo(this);
             IntentMainActivity();
+        }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode== PermissionUtils.REQUESTCODE ){
-            if (grantResults[0]== PackageManager.PERMISSION_GRANTED ){
+        if (requestCode == PermissionUtils.REQUESTCODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 VideoUtils.findAllVideo(this);
                 IntentMainActivity();
-            }
-            else{
-                PermissionDialog dialog=new PermissionDialog(this);
+            } else {
+                PermissionDialog dialog = new PermissionDialog(this);
                 dialog.setOnUserChooseListener(this);
                 dialog.show();
             }
@@ -44,15 +49,17 @@ public class SplashActivity extends AppCompatActivity implements PermissionDialo
 
     @Override
     public void onComfir() {
-        VideoUtils.findAllVideo(this);
+        PermissionUtils.requestPermission(this);
+//        VideoUtils.findAllVideo(this);
     }
 
     @Override
     public void onCancel() {
         finish();
     }
-    private void IntentMainActivity(){
-        Intent intent=new Intent(this,MainActivity.class);
+
+    private void IntentMainActivity() {
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
     }

@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -14,23 +13,47 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/colorPrimary"
-        app:title="@string/app_name"
+        app:popupTheme="@style/AppTheme.PopupOverlay"
         app:theme="@style/AppTheme.AppBarOverlay"
-        app:popupTheme="@style/AppTheme.PopupOverlay"/>
+        app:title="@string/app_name" />
 
-    <ListView
-        android:id="@+id/listview_main"
+    <FrameLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="5dp"
-        android:divider="@null"
-        android:layout_below="@id/toolbar"/>
+        android:layout_above="@+id/radio_group_menu"
+        android:layout_below="@id/toolbar" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:layout_width="wrap_content"
+    <ImageView
+        android:layout_width="65dp"
+        android:layout_height="65dp"
+        android:layout_above="@+id/radio_group_menu"
+        android:clickable="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="30dp"
+        android:layout_marginEnd="30dp"
+        android:background="@drawable/select_float"
+        />
+
+    <RadioGroup
+        android:id="@+id/radio_group_menu"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="20dp"
-        android:layout_marginEnd="20dp"/>
+        android:background="#10ffffff"
+        android:orientation="horizontal">
+
+        <RadioButton
+            style="@style/MenuRadioButton"
+            android:checked="true"
+            android:drawableTop="@drawable/select_menu_local"
+            android:text="@string/local" />
+
+        <RadioButton
+            style="@style/MenuRadioButton"
+            android:drawableTop="@drawable/select_menu_my"
+            android:text="@string/my" />
+
+    </RadioGroup>
+
 </RelativeLayout>
