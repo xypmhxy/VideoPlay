@@ -493,12 +493,13 @@ public class TxVideoPlayerController
     }
 
     @Override
-    protected void showChangePosition(long duration, int newPositionProgress) {
+    protected void showChangePosition(long duration,long newPosition) {
+        int progress= (int) (100f * newPosition/duration);
         mChangePositon.setVisibility(View.VISIBLE);
-        long newPosition = (long) (duration * newPositionProgress / 100f);
+//        long newPosition = (long) (duration * newPositionProgress / 100f);
         mChangePositionCurrent.setText(NiceUtil.formatTime(newPosition));
-        mChangePositionProgress.setProgress(newPositionProgress);
-        mSeek.setProgress(newPositionProgress);
+        mChangePositionProgress.setProgress(progress);
+        mSeek.setProgress(progress);
         mPosition.setText(NiceUtil.formatTime(newPosition));
     }
 

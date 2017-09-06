@@ -1,23 +1,59 @@
 package com.video.ren.videoplay.beans;
 
 import android.graphics.Bitmap;
-
-import java.io.Serializable;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 /**
  * Created by Administrator on 2017/9/5
  */
 
-public class Video implements Serializable{
+public class Video implements Parcelable{
 
-    private static final long serialVersionUID = 1L;
 
     private   int id;
     private String name;
     private String data;
     private long size;
     private String durtion;
-//    private Bitmap Thumbnail;
+    private Bitmap Thumbnail;
+
+
+    protected Video(Parcel in) {
+        id = in.readInt();
+        name = in.readString();
+        data = in.readString();
+        size = in.readLong();
+        durtion = in.readString();
+        Thumbnail = in.readParcelable(Bitmap.class.getClassLoader());
+    }
+
+    public static final Creator<Video> CREATOR = new Creator<Video>() {
+        @Override
+        public Video createFromParcel(Parcel in) {
+            return new Video(in);
+        }
+
+        @Override
+        public Video[] newArray(int size) {
+            return new Video[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(name);
+        dest.writeString(data);
+        dest.writeLong(size);
+        dest.writeString(durtion);
+        dest.writeParcelable(Thumbnail, flags);
+    }
 
     public int getId() {
         return id;
@@ -49,7 +85,7 @@ public class Video implements Serializable{
         this.data = data;
         this.size = size;
         this.durtion = durtion;
-//        Thumbnail = thumbnail;
+        Thumbnail = thumbnail;
     }
 
     public long getSize() {
@@ -68,11 +104,11 @@ public class Video implements Serializable{
         this.durtion = durtion;
     }
 
-//    public Bitmap getThumbnail() {
-//        return Thumbnail;
-//    }
-//
-//    public void setThumbnail(Bitmap thumbnail) {
-//        Thumbnail = thumbnail;
-//    }
+    public Bitmap getThumbnail() {
+        return Thumbnail;
+    }
+
+    public void setThumbnail(Bitmap thumbnail) {
+        Thumbnail = thumbnail;
+    }
 }

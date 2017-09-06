@@ -26,6 +26,7 @@ public abstract class NiceVideoPlayerController
 
     private float mDownX;
     private float mDownY;
+    private float tempX;
     private boolean mNeedChangePosition;
     private boolean mNeedChangeVolume;
     private boolean mNeedChangeBrightness;
@@ -202,10 +203,12 @@ public abstract class NiceVideoPlayerController
                 }
                 if (mNeedChangePosition) {
                     long duration = mNiceVideoPlayer.getDuration();
-                    long toPosition = (long) (mGestureDownPosition + duration * deltaX / getWidth());
-                    mNewPosition = Math.max(0, Math.min(duration, toPosition));
-                    int newPositionProgress = (int) (100f * mNewPosition / duration);
-                    showChangePosition(duration, newPositionProgress);
+//                    long toPosition = (long) (mGestureDownPosition + duration * deltaX/getWidth());
+//                    mNewPosition = Math.max(0, Math.min(duration, toPosition));
+                    long second= (long) (deltaX/50); //每滑动50个像素增加一秒
+                    mNewPosition=mNiceVideoPlayer.getCurrentPosition()+second *1000;
+//                    int newPositionProgress = (int) (100f * mNewPosition / duration);
+                    showChangePosition(duration, mNewPosition);
                 }
                 if (mNeedChangeBrightness) {
                     deltaY = -deltaY;
@@ -257,9 +260,10 @@ public abstract class NiceVideoPlayerController
      * 在手势滑动ACTION_MOVE的过程中，会不断调用此方法。
      *
      * @param duration            视频总时长ms
-     * @param newPositionProgress 新的位置进度，取值0到100。
+//     * @param newPositionProgress 新的位置进度，取值0到100。
+     @param mNewPosition 新的位置。
      */
-    protected abstract void showChangePosition(long duration, int newPositionProgress);
+    protected abstract void showChangePosition(long duration, long mNewPosition);
 
     /**
      * 手势左右滑动改变播放位置后，手势up或者cancel时，隐藏控制器中间的播放位置变化视图，

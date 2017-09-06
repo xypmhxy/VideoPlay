@@ -59,7 +59,7 @@ public class VideoListAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         viewHolder.name.setText(video.getName());
         viewHolder.time.setText(video.getDurtion());
-//        viewHolder.thumImg.setImageBitmap(video.getThumbnail());
+        viewHolder.thumImg.setImageBitmap(video.getThumbnail());
         return convertView;
     }
 
