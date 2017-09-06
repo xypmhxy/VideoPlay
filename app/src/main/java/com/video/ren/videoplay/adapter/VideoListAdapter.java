@@ -16,7 +16,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.L;
 
 /**
  * Created by Administrator on 2017/9/5
@@ -30,7 +29,7 @@ public class VideoListAdapter extends BaseAdapter {
     public VideoListAdapter(List<Video> videos, Context context) {
         this.videos = videos;
         this.context = context;
-        inflater=LayoutInflater.from(context);
+        inflater = LayoutInflater.from(context);
     }
 
     @Override
@@ -50,20 +49,21 @@ public class VideoListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder viewHolder=null;
-        Video video=getItem(position);
-        if (convertView==null){
-            convertView=inflater.inflate(R.layout.item_videos_list,parent,false);
-            viewHolder=new ViewHolder(convertView);
+        ViewHolder viewHolder = null;
+        Video video = getItem(position);
+        if (convertView == null) {
+            convertView = inflater.inflate(R.layout.item_videos_list, parent, false);
+            viewHolder = new ViewHolder(convertView);
             convertView.setTag(viewHolder);
-        }else
-            viewHolder= (ViewHolder) convertView.getTag();
+        } else
+            viewHolder = (ViewHolder) convertView.getTag();
         viewHolder.name.setText(video.getName());
         viewHolder.time.setText(video.getDurtion());
-        viewHolder.thumImg.setImageBitmap(video.getThumbnail());
+//        viewHolder.thumImg.setImageBitmap(video.getThumbnail());
         return convertView;
     }
-    class ViewHolder{
+
+    class ViewHolder {
 
         @BindView(R.id.text_name_item_videos)
         TextView name;
@@ -72,8 +72,8 @@ public class VideoListAdapter extends BaseAdapter {
         @BindView(R.id.image_thum_item_videos)
         ImageView thumImg;
 
-        public ViewHolder(View convertView){
-            ButterKnife.bind(this,convertView);
+        public ViewHolder(View convertView) {
+            ButterKnife.bind(this, convertView);
         }
     }
 }

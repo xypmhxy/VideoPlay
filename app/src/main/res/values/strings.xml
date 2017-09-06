@@ -3,4 +3,7 @@
     <string name="permission_dialog_content">需要用户给予权限才可正常使用^_^</string>
     <string name="permission_dialog_confirm">确定</string>
     <string name="permission_dialog_cancel">取消</string>
+    <string name="search_hint">输入视频名称</string>
+    <string name="local">本地</string>
+    <string name="my">我的</string>
 </resources>
