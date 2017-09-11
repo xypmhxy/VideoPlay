@@ -9,8 +9,12 @@ import android.support.v7.view.ContextThemeWrapper;
 import android.util.TypedValue;
 import android.view.WindowManager;
 
+import java.text.SimpleDateFormat;
 import java.util.Formatter;
 import java.util.Locale;
+import java.util.TimeZone;
+
+import static com.xiao.nicevideoplayer.R.id.position;
 
 /**
  * Created by XiaoJianjun on 2017/5/8.
@@ -111,6 +115,8 @@ public class NiceUtil {
      * @return ##:##
      */
     public static String formatTime(long milliseconds) {
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss", Locale.CHINA);
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT+0"));//设置后不算时区
         if (milliseconds <= 0 || milliseconds >= 24 * 60 * 60 * 1000) {
             return "00:00";
         }
@@ -120,6 +126,7 @@ public class NiceUtil {
         long hours = totalSeconds / 3600;
         StringBuilder stringBuilder = new StringBuilder();
         Formatter mFormatter = new Formatter(stringBuilder, Locale.getDefault());
+//        return sdf.format(milliseconds);
         if (hours > 0) {
             return mFormatter.format("%d:%02d:%02d", hours, minutes, seconds).toString();
         } else {
@@ -137,14 +144,27 @@ public class NiceUtil {
         context.getSharedPreferences("NICE_VIDEO_PALYER_PLAY_POSITION",
                 Context.MODE_PRIVATE)
                 .edit()
+                .putString("KEY_CURRENT_VIDEO", url)
                 .putLong(url, position)
                 .apply();
     }
 
     /**
+     * 取出上次保存的视频路径
+     *
+     * @param context 不解释
+     * @return 上次保存的视频路径
+     */
+    public static String getSavedCurrentVideo(Context context) {
+        return context.getSharedPreferences("NICE_VIDEO_PALYER_PLAY_POSITION",
+                Context.MODE_PRIVATE)
+                .getString("KEY_CURRENT_VIDEO", null);
+    }
+
+    /**
      * 取出上次保存的播放位置
      *
-     * @param context
+     * @param context 不解释
      * @param url     视频链接url
      * @return 上次保存的播放位置
      */

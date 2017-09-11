@@ -9,9 +9,15 @@ import android.view.MenuItem;
 
 import com.video.ren.videoplay.R;
 import com.video.ren.videoplay.beans.Video;
+import com.video.ren.videoplay.utils.DateUtils;
 import com.xiao.nicevideoplayer.NiceVideoPlayer;
 import com.xiao.nicevideoplayer.NiceVideoPlayerManager;
 import com.xiao.nicevideoplayer.TxVideoPlayerController;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import butterknife.BindView;
 
@@ -21,7 +27,7 @@ import butterknife.BindView;
 
 public class PlayActivity extends BaseActivity {
 
-    public static final String KEY_VIDEO="video";
+    public static final String KEY_VIDEO = "video";
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -34,30 +40,31 @@ public class PlayActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
-        Intent intent=getIntent();
-        video= (Video) intent.getParcelableExtra(KEY_VIDEO);
+        Intent intent = getIntent();
+        video = intent.getParcelableExtra(KEY_VIDEO);
         initToolBar();
-        videoPlayer.setPlayerType(NiceVideoPlayer.TYPE_IJK ); // IjkPlayer or MediaPlayer
+        videoPlayer.setPlayerType(NiceVideoPlayer.TYPE_IJK); // IjkPlayer or MediaPlayer
         TxVideoPlayerController controller = new TxVideoPlayerController(this);
         controller.setTitle(video.getName());
-        controller.setLenght(video.getSize());
-        videoPlayer.setUp(video.getData(),null);
+        long time = DateUtils.parseDate(video.getDurtion());
+        controller.setLenght(time);
+        videoPlayer.setUp(video.getData(), null);
         controller.imageView().setImageBitmap(video.getThumbnail());
         videoPlayer.setController(controller);
     }
 
-    private void initToolBar(){
+    private void initToolBar() {
         toolbar.setTitle(video.getName());
         setSupportActionBar(toolbar);
-        ActionBar actionBar=getSupportActionBar();
-        if (actionBar!=null){
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId()==android.R.id.home)
+        if (item.getItemId() == android.R.id.home)
             finish();
         return super.onOptionsItemSelected(item);
     }

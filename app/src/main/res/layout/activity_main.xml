@@ -42,6 +42,7 @@
         android:layout_below="@id/toolbar" />
 
     <ImageView
+        android:id="@+id/image_play_main_float"
         android:layout_width="65dp"
         android:layout_height="65dp"
         android:layout_above="@+id/radio_group_menu"
