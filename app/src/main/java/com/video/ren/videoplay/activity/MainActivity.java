@@ -1,29 +1,19 @@
 package com.video.ren.videoplay.activity;
 
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RadioGroup;
-import android.widget.Toast;
 
 import com.video.ren.videoplay.R;
 import com.video.ren.videoplay.adapter.VideoListAdapter;
 import com.video.ren.videoplay.beans.Video;
 import com.video.ren.videoplay.fragment.LocalVideoFragment;
+import com.video.ren.videoplay.utils.FloatWindowUtils;
 import com.video.ren.videoplay.utils.VideoUtils;
 import com.xiao.nicevideoplayer.NiceUtil;
 
@@ -31,11 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
-
-import static com.xiao.nicevideoplayer.NiceUtil.getSavedCurrentVideo;
 
 public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener, SearchView.OnQueryTextListener {
 
@@ -55,6 +41,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     private List<Video> list = new ArrayList<>();
     private VideoListAdapter adapter;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,9 +55,11 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
     @OnClick(R.id.image_play_main_float)
     public void onClick(View view) {
-//        String url = NiceUtil.getSavedCurrentVideo(this);
-//        if (url != null) {
-//            Video video = VideoUtils.findVideoByUrl(this, url);
+        String url = NiceUtil.getSavedCurrentVideo(this);
+        if (url != null) {
+            Video video = VideoUtils.findVideoByUrl(this, url);
+            FloatWindowUtils.getInstance().startFloatWindow(this, video);
+        }
 //            if (video != null) {
 //                Intent intent = new Intent(this, PlayActivity.class);
 //                intent.putExtra(PlayActivity.KEY_VIDEO, video);
@@ -82,15 +71,9 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 //            @Override
 //            public void onClick(View v) {
 //                Toast.makeText(MainActivity.this,"点击了我",Toast.LENGTH_SHORT).show();
-//            }
 //        });
 //        imageView.setImageResource(R.mipmap.ic_launcher);
-        View v = LayoutInflater.from(this).inflate(R.layout.activity_play, null);
-        WindowManager.LayoutParams params = new WindowManager.LayoutParams(300, 300);
-        WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
-        params.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
-        params.format = PixelFormat.RGBX_8888;
-        wm.addView(v, params);
+
     }
 
     @Override

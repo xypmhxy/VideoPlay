@@ -1,23 +1,21 @@
 package com.video.ren.videoplay.activity;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.video.ren.videoplay.Broadcast.HomeBroadcastReceiver;
 import com.video.ren.videoplay.R;
 import com.video.ren.videoplay.beans.Video;
 import com.video.ren.videoplay.utils.DateUtils;
+import com.video.ren.videoplay.utils.FloatWindowUtils;
 import com.xiao.nicevideoplayer.NiceVideoPlayer;
 import com.xiao.nicevideoplayer.NiceVideoPlayerManager;
 import com.xiao.nicevideoplayer.TxVideoPlayerController;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
-import java.util.TimeZone;
 
 import butterknife.BindView;
 
@@ -25,7 +23,7 @@ import butterknife.BindView;
  * Created by Administrator on 2017/9/6
  */
 
-public class PlayActivity extends BaseActivity {
+public class PlayActivity extends BaseActivity implements HomeBroadcastReceiver.OnHomeKeyPressListener {
 
     public static final String KEY_VIDEO = "video";
 
@@ -35,6 +33,7 @@ public class PlayActivity extends BaseActivity {
     NiceVideoPlayer videoPlayer;
 
     private Video video;
+    private HomeBroadcastReceiver receiver;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,14 +42,15 @@ public class PlayActivity extends BaseActivity {
         Intent intent = getIntent();
         video = intent.getParcelableExtra(KEY_VIDEO);
         initToolBar();
-        videoPlayer.setPlayerType(NiceVideoPlayer.TYPE_IJK); // IjkPlayer or MediaPlayer
-        TxVideoPlayerController controller = new TxVideoPlayerController(this);
-        controller.setTitle(video.getName());
-        long time = DateUtils.parseDate(video.getDurtion());
-        controller.setLenght(time);
-        videoPlayer.setUp(video.getData(), null);
-        controller.imageView().setImageBitmap(video.getThumbnail());
-        videoPlayer.setController(controller);
+        initVideoPlayer();
+        initHomeKeyBroadcast();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        NiceVideoPlayerManager.instance().releaseNiceVideoPlayer();
+        unregisterReceiver(receiver);
     }
 
     private void initToolBar() {
@@ -62,6 +62,23 @@ public class PlayActivity extends BaseActivity {
         }
     }
 
+    private void initVideoPlayer() {
+        videoPlayer.setPlayerType(NiceVideoPlayer.TYPE_IJK); // IjkPlayer or MediaPlayer
+        TxVideoPlayerController controller = new TxVideoPlayerController(this);
+        controller.setTitle(video.getName());
+        long time = DateUtils.parseDate(video.getDurtion());
+        controller.setLenght(time);
+        videoPlayer.setUp(video.getData(), null);
+        controller.imageView().setImageBitmap(video.getThumbnail());
+        videoPlayer.setController(controller);
+    }
+
+    private void initHomeKeyBroadcast() {
+        receiver = new HomeBroadcastReceiver(this);
+        IntentFilter intentFilter = new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
+        registerReceiver(receiver, intentFilter);
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home)
@@ -70,8 +87,10 @@ public class PlayActivity extends BaseActivity {
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        NiceVideoPlayerManager.instance().releaseNiceVideoPlayer();
+    public void onHomeKeyPress() {
+        if (videoPlayer.isPlaying()) {
+            NiceVideoPlayerManager.instance().releaseNiceVideoPlayer();
+            FloatWindowUtils.getInstance().startFloatWindow(this, video);
+        }
     }
 }
