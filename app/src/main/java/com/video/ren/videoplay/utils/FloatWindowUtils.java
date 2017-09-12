@@ -38,14 +38,15 @@ public class FloatWindowUtils implements View.OnTouchListener {
     }
 
     public void startFloatWindow(Context context, Video video) {
-        view = LayoutInflater.from(context).inflate(R.layout.float_play, null, false);
+        view = LayoutInflater.from(context.getApplicationContext()).inflate(R.layout.float_play, null, false);
         videoPlayer = (NiceVideoPlayer) view.findViewById(R.id.video_player);
+        controller = new TxVideoPlayerController(context.getApplicationContext());
         videoPlayer.setOnTouchListener(this);
         initVideoPlayer(video);
         params = new WindowManager.LayoutParams();
-        wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        wm = (WindowManager) context.getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
         params.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
-        params.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+        params.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL;
         params.format = PixelFormat.TRANSPARENT;
         params.width = WindowManager.LayoutParams.WRAP_CONTENT;
         params.height = WindowManager.LayoutParams.WRAP_CONTENT;

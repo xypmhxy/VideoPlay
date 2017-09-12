@@ -4,8 +4,6 @@
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
-    <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" />
-    <uses-permission-sdk-23 android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <application
         android:name=".VideoApplication"
         android:allowBackup="true"
@@ -28,7 +26,6 @@
         <activity android:name=".activity.PlayActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"/>
 
-        <receiver android:name=".Broadcast.HomeBroadcastReceiver" />
     </application>
 
 </manifest>

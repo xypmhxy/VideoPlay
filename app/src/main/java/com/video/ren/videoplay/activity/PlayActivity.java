@@ -87,9 +87,15 @@ public class PlayActivity extends BaseActivity implements HomeBroadcastReceiver.
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
     public void onHomeKeyPress() {
         if (videoPlayer.isPlaying()) {
             NiceVideoPlayerManager.instance().releaseNiceVideoPlayer();
+            videoPlayer.releasePlayer();
             FloatWindowUtils.getInstance().startFloatWindow(this, video);
         }
     }
