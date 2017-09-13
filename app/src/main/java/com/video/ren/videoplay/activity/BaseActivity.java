@@ -1,14 +1,11 @@
 package com.video.ren.videoplay.activity;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.view.WindowManager;
 
 import com.video.ren.videoplay.R;
 import com.video.ren.videoplay.utils.StatusBarUtil;

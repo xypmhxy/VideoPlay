@@ -72,7 +72,7 @@
             android:id="@+id/radiobtn_my"
             style="@style/MenuRadioButton"
             android:drawableTop="@drawable/select_menu_my"
-            android:text="@string/my" />
+            android:text="@string/setting" />
 
     </RadioGroup>
 

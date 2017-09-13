@@ -17,5 +17,5 @@
         android:layout_height="20dp"
         android:layout_alignParentEnd="true"
         android:padding="5dp"
-        android:src="@mipmap/ic_launcher" />
+        android:src="@drawable/close" />
 </RelativeLayout>

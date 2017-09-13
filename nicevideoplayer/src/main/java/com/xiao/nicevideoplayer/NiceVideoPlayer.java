@@ -105,6 +105,7 @@ public class NiceVideoPlayer extends FrameLayout
     private int mBufferPercentage;
     private boolean continueFromLastPosition = true;
     private long skipToPosition;
+    private boolean isFloatPlay = false;
     public float pressX, pressY;
 
     public NiceVideoPlayer(Context context) {
@@ -142,11 +143,17 @@ public class NiceVideoPlayer extends FrameLayout
         mContainer.addView(mController, params);
     }
 
-    boolean isFloatPlay = false;
-
+    /**
+     * 设置是否悬浮窗口播放
+     * @param isFloatPlay 是否悬浮窗口播放
+     */
     public void isFloatPlay(boolean isFloatPlay) {
         this.isFloatPlay = isFloatPlay;
     }
+
+    /**
+     * 如果是悬浮窗口模式下滑动便拦截事件交由自身ontouchevent处理
+     */
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {

@@ -39,4 +39,25 @@
             style="@style/SwichBtnStyle"
             app:track="@drawable/switch_track" />
     </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@android:color/darker_gray" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp">
+
+        <TextView
+            style="@style/setting_text_style"
+            android:text="@string/scan_time" />
+
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/switch_scan_time"
+            style="@style/SwichBtnStyle"
+            app:track="@drawable/switch_track" />
+    </RelativeLayout>
+
 </LinearLayout>

@@ -13,6 +13,7 @@ import com.video.ren.videoplay.R;
 import com.video.ren.videoplay.beans.Video;
 import com.video.ren.videoplay.utils.DateUtils;
 import com.video.ren.videoplay.utils.FloatWindowUtils;
+import com.video.ren.videoplay.utils.PreferencesUtils;
 import com.xiao.nicevideoplayer.NiceVideoPlayer;
 import com.xiao.nicevideoplayer.NiceVideoPlayerManager;
 import com.xiao.nicevideoplayer.TxVideoPlayerController;
@@ -71,6 +72,8 @@ public class PlayActivity extends BaseActivity implements HomeBroadcastReceiver.
         videoPlayer.setUp(video.getData(), null);
         controller.imageView().setImageBitmap(video.getThumbnail());
         videoPlayer.setController(controller);
+        if (PreferencesUtils.getPlayNow(this))
+            videoPlayer.start();
     }
 
     private void initHomeKeyBroadcast() {
@@ -87,14 +90,9 @@ public class PlayActivity extends BaseActivity implements HomeBroadcastReceiver.
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    @Override
     public void onHomeKeyPress() {
-        if (videoPlayer.isPlaying()) {
-            NiceVideoPlayerManager.instance().releaseNiceVideoPlayer();
+        NiceVideoPlayerManager.instance().releaseNiceVideoPlayer();
+        if (videoPlayer.isPlaying() && PreferencesUtils.getFloatWindow(this)) {
             FloatWindowUtils.getInstance().startFloatWindow(this, video);
         }
     }

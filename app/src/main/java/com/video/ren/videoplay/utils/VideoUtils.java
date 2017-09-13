@@ -11,11 +11,8 @@ import android.provider.MediaStore;
 
 import com.video.ren.videoplay.beans.Video;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
-import java.util.TimeZone;
 
 /**
  * Created by Administrator on 2017/9/4
@@ -28,7 +25,10 @@ public class VideoUtils {
 
     public static void findAllVideo(Activity activity) {
         ContentResolver cr = activity.getContentResolver();
-        Cursor cursor = cr.query(uri, null, MediaStore.Video.Media.DURATION + ">?", new String[]{"" + 2 * 1000}, null);
+        int scanTime = 0;
+        if (PreferencesUtils.getScanTime(activity))
+            scanTime = 1000 * 60 * 3;
+        Cursor cursor = cr.query(uri, null, MediaStore.Video.Media.DURATION + ">?", new String[]{"" + scanTime}, null);
         if (cursor == null)
             return;
         videos.clear();

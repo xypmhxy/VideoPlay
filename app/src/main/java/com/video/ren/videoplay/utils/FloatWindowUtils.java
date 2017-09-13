@@ -2,15 +2,11 @@ package com.video.ren.videoplay.utils;
 
 import android.content.Context;
 import android.graphics.PixelFormat;
-import android.util.Log;
-import android.view.GestureDetector;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import com.video.ren.videoplay.R;
 import com.video.ren.videoplay.beans.Video;
@@ -29,6 +25,7 @@ public class FloatWindowUtils implements View.OnTouchListener {
     private WindowManager wm;
     private WindowManager.LayoutParams params;
     private View view;
+    private int lastParamsX, lastParamsY;
 
     private static FloatWindowUtils instance;
 
@@ -50,8 +47,7 @@ public class FloatWindowUtils implements View.OnTouchListener {
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NiceVideoPlayerManager.instance().releaseNiceVideoPlayer();
-                wm.removeView(view);
+                release();
             }
         });
         controller = new TxVideoPlayerController(context);
@@ -64,7 +60,10 @@ public class FloatWindowUtils implements View.OnTouchListener {
         params.format = PixelFormat.TRANSPARENT;
         params.width = WindowManager.LayoutParams.WRAP_CONTENT;
         params.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        lastParamsX = params.x;
+        lastParamsY = params.y;
         wm.addView(view, params);
+        videoPlayer.start();
     }
 
     private void initVideoPlayer(Video video) {
@@ -75,22 +74,29 @@ public class FloatWindowUtils implements View.OnTouchListener {
         videoPlayer.setUp(video.getData(), null);
         videoPlayer.setController(controller);
         videoPlayer.isFloatPlay(true);
-        videoPlayer.start();
+    }
+
+    private void release() {
+        videoPlayer.isFloatPlay(false);
+        NiceVideoPlayerManager.instance().releaseNiceVideoPlayer();
+        wm.removeView(view);
+        view=null;
+        params=null;
+        videoPlayer=null;
+        controller=null;
     }
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_MOVE:
-//                Log.d("rq", params.x + "==" + params.y);
-                Log.e("rq", (int) (event.getRawY() - videoPlayer.pressY) + "");
-                params.x += (int) (event.getRawX() - videoPlayer.pressX);
-                params.y += (int) (event.getRawY() - videoPlayer.pressY);
-                Log.d("rq", params.y + "");
+                params.x = (int) (lastParamsX + (event.getRawX() - videoPlayer.pressX));
+                params.y = (int) (lastParamsY + (event.getRawY() - videoPlayer.pressY));
                 wm.updateViewLayout(view, params);
                 return true;
             case MotionEvent.ACTION_UP:
-                params.x = params.y = 0;
+                lastParamsX = params.x;
+                lastParamsY = params.y;
                 videoPlayer.pressX = videoPlayer.pressY = 0;
                 break;
         }
