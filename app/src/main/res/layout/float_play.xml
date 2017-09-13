@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/float_window_container"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="220dp"
     android:orientation="vertical">
 
     <com.xiao.nicevideoplayer.NiceVideoPlayer
@@ -12,4 +11,11 @@
         android:layout_height="220dp"
         android:layout_centerInParent="true" />
 
+    <ImageView
+        android:id="@+id/image_close_float"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignParentEnd="true"
+        android:padding="5dp"
+        android:src="@mipmap/ic_launcher" />
 </RelativeLayout>

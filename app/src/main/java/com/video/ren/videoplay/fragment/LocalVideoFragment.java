@@ -35,7 +35,7 @@ public class LocalVideoFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_local, container,false);
+        View view = inflater.inflate(R.layout.fragment_local, container, false);
         ButterKnife.bind(this, view);
         return view;
     }
@@ -47,10 +47,11 @@ public class LocalVideoFragment extends Fragment {
         VideoListAdapter adapter = new VideoListAdapter(videos, getContext());
         listView.setAdapter(adapter);
     }
+
     @OnItemClick(R.id.listview_main)
-    public void onItemClick(int position){
-        Intent intent=new Intent(getActivity(),PlayActivity.class);
-        intent.putExtra(PlayActivity.KEY_VIDEO , videos.get(position));
+    public void onItemClick(int position) {
+        Intent intent = new Intent(getActivity(), PlayActivity.class);
+        intent.putExtra(PlayActivity.KEY_VIDEO, videos.get(position));
         startActivity(intent);
     }
 }

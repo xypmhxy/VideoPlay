@@ -6,4 +6,6 @@
     <string name="search_hint">输入视频名称</string>
     <string name="local">本地</string>
     <string name="my">我的</string>
+    <string name="play_now">进入播放页面后直接播放</string>
+    <string name="is_float_window">开启悬浮窗播放</string>
 </resources>

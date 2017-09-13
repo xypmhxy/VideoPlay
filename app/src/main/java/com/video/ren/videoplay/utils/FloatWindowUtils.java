@@ -3,14 +3,19 @@ package com.video.ren.videoplay.utils;
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.video.ren.videoplay.R;
 import com.video.ren.videoplay.beans.Video;
 import com.xiao.nicevideoplayer.NiceVideoPlayer;
+import com.xiao.nicevideoplayer.NiceVideoPlayerManager;
 import com.xiao.nicevideoplayer.TxVideoPlayerController;
 
 /**
@@ -38,19 +43,27 @@ public class FloatWindowUtils implements View.OnTouchListener {
     }
 
     public void startFloatWindow(Context context, Video video) {
-        view = LayoutInflater.from(context.getApplicationContext()).inflate(R.layout.float_play, null, false);
+        view = LayoutInflater.from(context).inflate(R.layout.float_play, null, false);
         videoPlayer = (NiceVideoPlayer) view.findViewById(R.id.video_player);
-        controller = new TxVideoPlayerController(context.getApplicationContext());
         videoPlayer.setOnTouchListener(this);
+        ImageView close = (ImageView) view.findViewById(R.id.image_close_float);
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NiceVideoPlayerManager.instance().releaseNiceVideoPlayer();
+                wm.removeView(view);
+            }
+        });
+        controller = new TxVideoPlayerController(context);
         initVideoPlayer(video);
         params = new WindowManager.LayoutParams();
         wm = (WindowManager) context.getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
         params.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
-        params.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL;
+        params.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL |
+                WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED;
         params.format = PixelFormat.TRANSPARENT;
         params.width = WindowManager.LayoutParams.WRAP_CONTENT;
         params.height = WindowManager.LayoutParams.WRAP_CONTENT;
-        videoPlayer.setPlayerType(NiceVideoPlayer.TYPE_IJK); // IjkPlayer or MediaPlayer
         wm.addView(view, params);
     }
 
@@ -61,17 +74,24 @@ public class FloatWindowUtils implements View.OnTouchListener {
         videoPlayer.setPlayerType(NiceVideoPlayer.TYPE_IJK); // IjkPlayer or MediaPlayer
         videoPlayer.setUp(video.getData(), null);
         videoPlayer.setController(controller);
+        videoPlayer.isFloatPlay(true);
         videoPlayer.start();
     }
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        Log.d("rq", "==================");
         switch (event.getAction()) {
             case MotionEvent.ACTION_MOVE:
-                params.x = (int) event.getX();
-                params.y = (int) event.getY();
+//                Log.d("rq", params.x + "==" + params.y);
+                Log.e("rq", (int) (event.getRawY() - videoPlayer.pressY) + "");
+                params.x += (int) (event.getRawX() - videoPlayer.pressX);
+                params.y += (int) (event.getRawY() - videoPlayer.pressY);
+                Log.d("rq", params.y + "");
                 wm.updateViewLayout(view, params);
+                return true;
+            case MotionEvent.ACTION_UP:
+                params.x = params.y = 0;
+                videoPlayer.pressX = videoPlayer.pressY = 0;
                 break;
         }
         return false;

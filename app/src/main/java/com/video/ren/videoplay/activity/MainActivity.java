@@ -1,5 +1,6 @@
 package com.video.ren.videoplay.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -13,6 +14,7 @@ import com.video.ren.videoplay.R;
 import com.video.ren.videoplay.adapter.VideoListAdapter;
 import com.video.ren.videoplay.beans.Video;
 import com.video.ren.videoplay.fragment.LocalVideoFragment;
+import com.video.ren.videoplay.fragment.SettingFragment;
 import com.video.ren.videoplay.utils.FloatWindowUtils;
 import com.video.ren.videoplay.utils.VideoUtils;
 import com.xiao.nicevideoplayer.NiceUtil;
@@ -40,47 +42,43 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
     private List<Video> list = new ArrayList<>();
     private VideoListAdapter adapter;
+    private LocalVideoFragment localVideoFragment;
+    private SettingFragment settingFragment;
 
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        getSupportFragmentManager().beginTransaction().add(R.id.container, new LocalVideoFragment()).commit();
-        search.setOnQueryTextListener(this);
-        radioGroupMenu.setOnCheckedChangeListener(this);
-        adapter = new VideoListAdapter(list, this);
-        listView.setAdapter(adapter);
-    }
 
     @OnClick(R.id.image_play_main_float)
     public void onClick(View view) {
         String url = NiceUtil.getSavedCurrentVideo(this);
         if (url != null) {
             Video video = VideoUtils.findVideoByUrl(this, url);
-            FloatWindowUtils.getInstance().startFloatWindow(this, video);
+            if (video != null) {
+                Intent intent = new Intent(this, PlayActivity.class);
+                intent.putExtra(PlayActivity.KEY_VIDEO, video);
+                startActivity(intent);
+            }
         }
-//            if (video != null) {
-//                Intent intent = new Intent(this, PlayActivity.class);
-//                intent.putExtra(PlayActivity.KEY_VIDEO, video);
-//                startActivity(intent);
-//            }
-//        }
-//        ImageView imageView = new ImageView(this);
-//        imageView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Toast.makeText(MainActivity.this,"点击了我",Toast.LENGTH_SHORT).show();
-//        });
-//        imageView.setImageResource(R.mipmap.ic_launcher);
+    }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        getSupportFragmentManager().beginTransaction().add(R.id.container, localVideoFragment = new LocalVideoFragment()).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.container, settingFragment = new SettingFragment()).hide(settingFragment).commit();
+        search.setOnQueryTextListener(this);
+        radioGroupMenu.setOnCheckedChangeListener(this);
+        adapter = new VideoListAdapter(list, this);
+        listView.setAdapter(adapter);
     }
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
         switch (checkedId) {
             case R.id.radiobtn_local:
+                getSupportFragmentManager().beginTransaction().show(localVideoFragment).hide(settingFragment).commit();
                 break;
+            case R.id.radiobtn_my:
+                getSupportFragmentManager().beginTransaction().show(settingFragment).hide(localVideoFragment).commit();
         }
     }
 

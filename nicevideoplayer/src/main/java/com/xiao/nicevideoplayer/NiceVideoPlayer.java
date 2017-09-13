@@ -8,6 +8,7 @@ import android.media.AudioManager;
 import android.net.Uri;
 import android.util.AttributeSet;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.TextureView;
 import android.view.ViewGroup;
@@ -104,6 +105,7 @@ public class NiceVideoPlayer extends FrameLayout
     private int mBufferPercentage;
     private boolean continueFromLastPosition = true;
     private long skipToPosition;
+    public float pressX, pressY;
 
     public NiceVideoPlayer(Context context) {
         this(context, null);
@@ -138,6 +140,25 @@ public class NiceVideoPlayer extends FrameLayout
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT);
         mContainer.addView(mController, params);
+    }
+
+    boolean isFloatPlay = false;
+
+    public void isFloatPlay(boolean isFloatPlay) {
+        this.isFloatPlay = isFloatPlay;
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        if (isFullScreen())
+            return super.onInterceptTouchEvent(ev);
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            pressX = ev.getRawX();
+            pressY = ev.getRawY();
+        }
+        if (isFloatPlay && ev.getAction() == MotionEvent.ACTION_MOVE)
+            return isFloatPlay && ev.getAction() == MotionEvent.ACTION_MOVE || super.onInterceptTouchEvent(ev);
+        return super.onInterceptTouchEvent(ev);
     }
 
     /**
