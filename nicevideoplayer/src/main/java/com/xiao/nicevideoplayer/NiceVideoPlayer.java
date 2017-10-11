@@ -145,10 +145,15 @@ public class NiceVideoPlayer extends FrameLayout
 
     /**
      * 设置是否悬浮窗口播放
+     *
      * @param isFloatPlay 是否悬浮窗口播放
      */
-    public void isFloatPlay(boolean isFloatPlay) {
+    public void setFloatPlay(boolean isFloatPlay) {
         this.isFloatPlay = isFloatPlay;
+    }
+
+    public boolean isFloatPlay() {
+        return isFloatPlay;
     }
 
     /**
@@ -162,9 +167,12 @@ public class NiceVideoPlayer extends FrameLayout
         if (ev.getAction() == MotionEvent.ACTION_DOWN) {
             pressX = ev.getRawX();
             pressY = ev.getRawY();
+        } else if (ev.getAction() == MotionEvent.ACTION_MOVE) {
+            if (Math.abs(ev.getRawX() - pressX) >= 20 || Math.abs(ev.getRawY() - pressY) >= 20)
+                return isFloatPlay && ev.getAction() == MotionEvent.ACTION_MOVE || super.onInterceptTouchEvent(ev);
         }
-        if (isFloatPlay && ev.getAction() == MotionEvent.ACTION_MOVE)
-            return isFloatPlay && ev.getAction() == MotionEvent.ACTION_MOVE || super.onInterceptTouchEvent(ev);
+//        if (setFloatPlay && ev.getAction() == MotionEvent.ACTION_MOVE)
+//            return setFloatPlay && ev.getAction() == MotionEvent.ACTION_MOVE || super.onInterceptTouchEvent(ev);
         return super.onInterceptTouchEvent(ev);
     }
 
@@ -494,6 +502,7 @@ public class NiceVideoPlayer extends FrameLayout
         @Override
         public void onCompletion(IMediaPlayer mp) {
             mCurrentState = STATE_COMPLETED;
+            NiceUtil.savePlayPosition(mContext, mUrl, 0);
             mController.onPlayStateChanged(mCurrentState);
             LogUtil.d("onCompletion ——> STATE_COMPLETED");
             // 清除屏幕常量

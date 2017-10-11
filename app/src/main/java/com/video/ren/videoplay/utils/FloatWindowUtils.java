@@ -40,6 +40,7 @@ public class FloatWindowUtils implements View.OnTouchListener {
     }
 
     public void startFloatWindow(Context context, Video video) {
+        NiceVideoPlayerManager.instance().releaseNiceVideoPlayer();
         view = LayoutInflater.from(context).inflate(R.layout.float_play, null, false);
         videoPlayer = (NiceVideoPlayer) view.findViewById(R.id.video_player);
         videoPlayer.setOnTouchListener(this);
@@ -73,17 +74,17 @@ public class FloatWindowUtils implements View.OnTouchListener {
         videoPlayer.setPlayerType(NiceVideoPlayer.TYPE_IJK); // IjkPlayer or MediaPlayer
         videoPlayer.setUp(video.getData(), null);
         videoPlayer.setController(controller);
-        videoPlayer.isFloatPlay(true);
+        videoPlayer.setFloatPlay(true);
     }
 
-    private void release() {
-        videoPlayer.isFloatPlay(false);
+    public void release() {
+        videoPlayer.setFloatPlay(false);
         NiceVideoPlayerManager.instance().releaseNiceVideoPlayer();
         wm.removeView(view);
-        view=null;
-        params=null;
-        videoPlayer=null;
-        controller=null;
+        view = null;
+        params = null;
+        videoPlayer = null;
+        controller = null;
     }
 
     @Override

@@ -27,6 +27,8 @@ public class SettingFragment extends Fragment {
     SwitchCompat playNow;
     @BindView(R.id.switch_float_play)
     SwitchCompat floatPlay;
+    @BindView(R.id.switch_auto_orientation)
+    SwitchCompat autoOrientation;
     @BindView(R.id.switch_scan_time)
     SwitchCompat scan;
 
@@ -43,10 +45,11 @@ public class SettingFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         playNow.setChecked(PreferencesUtils.getPlayNow(getContext()));
         floatPlay.setChecked(PreferencesUtils.getFloatWindow(getContext()));
+        autoOrientation.setChecked(PreferencesUtils.getAutoOrientation(getContext()));
         scan.setChecked(PreferencesUtils.getScanTime(getContext()));
     }
 
-    @OnCheckedChanged({R.id.switch_play_now, R.id.switch_float_play, R.id.switch_scan_time})
+    @OnCheckedChanged({R.id.switch_play_now, R.id.switch_float_play, R.id.switch_scan_time, R.id.switch_auto_orientation})
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         switch (buttonView.getId()) {
             case R.id.switch_play_now:
@@ -57,6 +60,9 @@ public class SettingFragment extends Fragment {
                 break;
             case R.id.switch_scan_time:
                 PreferencesUtils.saveScanTime(getContext(), isChecked);
+                break;
+            case R.id.switch_auto_orientation:
+                PreferencesUtils.saveAutoOrientation(getContext(), isChecked);
                 break;
         }
     }

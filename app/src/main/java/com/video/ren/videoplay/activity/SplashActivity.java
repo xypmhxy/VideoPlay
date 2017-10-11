@@ -20,18 +20,24 @@ public class SplashActivity extends AppCompatActivity implements PermissionDialo
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash);
+//        setContentView(R.layout.activity_splash);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (PermissionUtils.checkPermission(this)) {
-                VideoUtils.findAllVideo(this);
+            if (PermissionUtils.checkReadSDcardPermission(this)) { //是否有权限
+                VideoUtils.findAllVideo(this); //获取视频
                 IntentMainActivity();
             }
         } else {
-            VideoUtils.findAllVideo(this);
+            VideoUtils.findAllVideo(this);//获取视频
             IntentMainActivity();
         }
     }
 
+    /**
+     * 权限请求
+     * @param requestCode 请求码
+     * @param permissions 请求的权限
+     * @param grantResults 是否允许
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);

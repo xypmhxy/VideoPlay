@@ -15,6 +15,7 @@ import com.video.ren.videoplay.adapter.VideoListAdapter;
 import com.video.ren.videoplay.beans.Video;
 import com.video.ren.videoplay.fragment.LocalVideoFragment;
 import com.video.ren.videoplay.fragment.SettingFragment;
+import com.video.ren.videoplay.utils.BrandUtils;
 import com.video.ren.videoplay.utils.FloatWindowUtils;
 import com.video.ren.videoplay.utils.VideoUtils;
 import com.xiao.nicevideoplayer.NiceUtil;
@@ -48,6 +49,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
     @OnClick(R.id.image_play_main_float)
     public void onClick(View view) {
+        BrandUtils.getPhoneBrand();
         String url = NiceUtil.getSavedCurrentVideo(this);
         if (url != null) {
             Video video = VideoUtils.findVideoByUrl(this, url);

@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.os.BatteryManager;
 import android.os.CountDownTimer;
 import android.support.annotation.DrawableRes;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -460,7 +461,6 @@ public class TxVideoPlayerController
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
     }
 
     @Override
@@ -493,8 +493,8 @@ public class TxVideoPlayerController
     }
 
     @Override
-    protected void showChangePosition(long duration,long newPosition) {
-        int progress= (int) (100f * newPosition/duration);
+    protected void showChangePosition(long duration, long newPosition) {
+        int progress = (int) (100f * newPosition / duration);
         mChangePositon.setVisibility(View.VISIBLE);
 //        long newPosition = (long) (duration * newPositionProgress / 100f);
         mChangePositionCurrent.setText(NiceUtil.formatTime(newPosition));
