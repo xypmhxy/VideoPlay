@@ -78,6 +78,8 @@ public class FloatWindowUtils implements View.OnTouchListener {
     }
 
     public void release() {
+        if (videoPlayer == null)
+            return;
         videoPlayer.setFloatPlay(false);
         NiceVideoPlayerManager.instance().releaseNiceVideoPlayer();
         wm.removeView(view);

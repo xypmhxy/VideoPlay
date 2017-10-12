@@ -1,6 +1,7 @@
 package com.xiao.nicevideoplayer;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.SurfaceTexture;
@@ -87,6 +88,8 @@ public class NiceVideoPlayer extends FrameLayout
      * MediaPlayer
      **/
     public static final int TYPE_NATIVE = 222;
+
+    public static final String KEY_FULL_SCREEN = "neddFullScreen";
 
     private int mPlayerType = TYPE_IJK;
     private int mCurrentState = STATE_IDLE;
@@ -586,7 +589,12 @@ public class NiceVideoPlayer extends FrameLayout
     @Override
     public void enterFullScreen() {
         if (mCurrentMode == MODE_FULL_SCREEN) return;
-
+        if (isFloatPlay) {
+            Intent intent = new Intent("com.video.ren.videoplay.activity.Play");
+            intent.putExtra(KEY_FULL_SCREEN, true);
+            getContext().startActivity(intent);
+            return;
+        }
         // 隐藏ActionBar、状态栏，并横屏
         NiceUtil.hideActionBar(mContext);
         NiceUtil.scanForActivity(mContext)

@@ -60,7 +60,7 @@ public class PlayActivity extends BaseActivity implements HomeBroadcastReceiver.
     private Video video;
     private HomeBroadcastReceiver receiver;
     private boolean isFloatPlaying;
-    private SensorManager sm = null;
+    private boolean needFullScreen;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -75,13 +75,25 @@ public class PlayActivity extends BaseActivity implements HomeBroadcastReceiver.
             ScreenUtils.registerSensorListener(this, this);
     }
 
+
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onRestart() {
+        super.onRestart();
         if (isFloatPlaying) {
             FloatWindowUtils.getInstance().release();
             isFloatPlaying = false;
             videoPlayer.start();
+            if (needFullScreen)
+                videoPlayer.enterFullScreen();
+            needFullScreen = false;
+        }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (intent != null) {
+            needFullScreen = intent.getBooleanExtra(NiceVideoPlayer.KEY_FULL_SCREEN, false);
         }
     }
 
