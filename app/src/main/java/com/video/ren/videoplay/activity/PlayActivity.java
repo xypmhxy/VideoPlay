@@ -182,9 +182,9 @@ public class PlayActivity extends BaseActivity implements HomeBroadcastReceiver.
 
     @Override
     public void onOrientationChanged(int orientation) {
-        if (orientation == ScreenUtils.LANDSCAPE)
+        if (orientation == ScreenUtils.LANDSCAPE) //横屏
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        else
+        else //竖屏
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 }

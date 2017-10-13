@@ -29,8 +29,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.PlayActivity"
-            android:launchMode="singleTask"
-            android:configChanges="orientation|keyboardHidden|screenSize">
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="com.video.ren.videoplay.activity.Play" />
                 <category android:name="android.intent.category.DEFAULT" />

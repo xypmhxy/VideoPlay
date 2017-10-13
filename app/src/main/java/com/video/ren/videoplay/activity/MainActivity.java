@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -25,6 +26,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import butterknife.OnItemClick;
 
 public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener, SearchView.OnQueryTextListener {
 
@@ -109,5 +111,13 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             adapter.notifyDataSetInvalidated();
         }
         return false;
+    }
+
+    @OnItemClick(R.id.listview_search)
+    public void onItemClick(int position) {
+        Video video = adapter.getItem(position);
+        Intent intent = new Intent(this, PlayActivity.class);
+        intent.putExtra(PlayActivity.KEY_VIDEO, video);
+        startActivity(intent);
     }
 }
